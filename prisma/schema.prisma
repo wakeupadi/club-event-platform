@@ -21,11 +21,45 @@ model Club {
 }
 
 model Event {
+  id          String   @id @default(cuid())
+  title       String
+  date        DateTime
+  location    String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  clubId String
+  club   Club   @relation(fields: [clubId], references: [id])
+  RSVP   RSVP[]
+}
+
+// NEW: The User profile to track Gamification points
+model User {
+  id     String @id @default(cuid())
+  name   String
+  points Int    @default(0) // Everyone starts at 0
+  rsvps  RSVP[]
+}
+
+// NEW: The bridge table connecting Users and Events
+model RSVP {
   id        String   @id @default(cuid())
-  title     String
-  date      DateTime
-  clubId    String
-  club      Club     @relation(fields: [clubId], references: [id])
+  userId    String
+  eventId   String
+  user      User     @relation(fields: [userId], references: [id])
+  event     Event    @relation(fields: [eventId], references: [id])
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  // This ensures a user can only RSVP to a specific event ONE time
+  @@unique([userId, eventId])
+}
+
+// NEW: The University Academic Calendar for Blackout Dates
+model AcademicCalendar {
+  id        String   @id @default(cuid())
+  title     String   // e.g., "Mid-Semester Exams", "Diwali Break"
+  startDate DateTime
+  endDate   DateTime
+  type      String   // e.g., "EXAM", "HOLIDAY", "FEST"
 }

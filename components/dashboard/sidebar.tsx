@@ -1,15 +1,24 @@
-import { CalendarDays, LayoutDashboard, Trophy, Users } from "lucide-react"
+"use client"
+
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { CalendarDays, LayoutDashboard, Trophy, Users, PlusCircle } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+// 1. Swapped 'active' for actual URL 'href' routes
 const navItems = [
-  { label: "Timeline", icon: LayoutDashboard, active: true },
-  { label: "My Events", icon: CalendarDays, active: false },
-  { label: "Clubs", icon: Users, active: false },
-  { label: "Leaderboard", icon: Trophy, active: false },
+  { label: "Timeline", href: "/", icon: LayoutDashboard },
+  { label: "Create Event", href: "/create", icon: PlusCircle }, // Added your new route
+  { label: "My Events", href: "/my-events", icon: CalendarDays },
+  { label: "Clubs", href: "/clubs", icon: Users },
+  { label: "Leaderboard", href: "/leaderboard", icon: Trophy },
 ]
 
 export function DashboardSidebar() {
+  // 2. This hook reads the current browser URL
+  const pathname = usePathname()
+
   return (
     <aside className="flex w-56 shrink-0 flex-col border-r border-sidebar-border bg-sidebar">
       <div className="border-b border-sidebar-border px-5 py-6">
@@ -22,21 +31,27 @@ export function DashboardSidebar() {
       </div>
 
       <nav className="flex flex-1 flex-col gap-1 p-3">
-        {navItems.map(({ label, icon: Icon, active }) => (
-          <button
-            key={label}
-            type="button"
-            className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-              active
-                ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                : "text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground"
-            )}
-          >
-            <Icon className="size-4 shrink-0" />
-            {label}
-          </button>
-        ))}
+        {navItems.map(({ label, href, icon: Icon }) => {
+          // 3. Dynamically check if this button matches the current URL
+          const isActive = pathname === href
+
+          return (
+            // 4. Using Next.js <Link> instead of <button> for instant, no-reload navigation
+            <Link
+              key={label}
+              href={href}
+              className={cn(
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                isActive
+                  ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                  : "text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground"
+              )}
+            >
+              <Icon className="size-4 shrink-0" />
+              {label}
+            </Link>
+          )
+        })}
       </nav>
     </aside>
   )
