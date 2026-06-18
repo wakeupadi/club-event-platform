@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { awardAchievement } from "@/actions/achievements";
+import { awardAchievement } from "@/app/actions/achievements";
 
 interface User {
   id: string;

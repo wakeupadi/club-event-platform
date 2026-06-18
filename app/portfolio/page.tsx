@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { getActiveRole, getCurrentUser } from "@/lib/auth";
-import { getStudentPortfolio } from "@/actions/achievements";
+import { getStudentPortfolio } from "@/app/actions/achievements";
 import { PrintButton } from "@/components/dashboard/print-button";
 
 export default async function PortfolioPage() {
