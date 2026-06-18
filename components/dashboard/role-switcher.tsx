@@ -22,7 +22,7 @@ export function RoleSwitcher({ initialRole }: RoleSwitcherProps) {
       });
       if (res.ok) {
         setRole(newRole);
-        router.refresh();
+        window.location.reload();
       }
     } catch (err) {
       console.error("Failed to switch role:", err);
@@ -30,7 +30,7 @@ export function RoleSwitcher({ initialRole }: RoleSwitcherProps) {
   }
 
   return (
-    <div className="flex bg-[#121214] p-1 rounded-lg border border-zinc-850">
+    <div className="flex bg-card/90 backdrop-blur-xl shadow-lg p-1 rounded-lg border border-zinc-850">
       <button
         type="button"
         onClick={() => toggleRole("student")}

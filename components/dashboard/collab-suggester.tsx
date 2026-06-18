@@ -52,13 +52,13 @@ export function CollabSuggester({ clubId }: CollabSuggesterProps) {
         type="button"
         onClick={handleFindCollaborators}
         disabled={isLoading}
-        className="inline-flex items-center justify-center rounded-lg border border-zinc-800 bg-[#111111] px-4 py-2 text-sm font-medium text-zinc-100 transition hover:border-zinc-700 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+        className="inline-flex items-center justify-center rounded-lg border border-zinc-800 bg-card/80 backdrop-blur-xl shadow-2xl px-4 py-2 text-sm font-medium text-zinc-100 transition hover:border-zinc-700 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isLoading ? "Finding collaborators..." : "Find Collaborators"}
       </button>
 
       {error ? (
-        <div className="rounded-xl border border-red-600/30 bg-[#111111] p-4 text-sm text-red-200">
+        <div className="rounded-xl border border-red-600/30 bg-card/80 backdrop-blur-xl shadow-2xl p-4 text-sm text-red-200">
           {error}
         </div>
       ) : null}
@@ -66,7 +66,7 @@ export function CollabSuggester({ clubId }: CollabSuggesterProps) {
       {suggestions && suggestions.length > 0 ? (
         <div className="grid gap-3">
           {suggestions.map((suggestion) => (
-            <div key={suggestion.id} className="rounded-2xl border border-zinc-800 bg-[#111111] p-4 shadow-sm">
+            <div key={suggestion.id} className="rounded-2xl border border-zinc-800 bg-card/80 backdrop-blur-xl shadow-2xl p-4 shadow-sm">
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <h3 className="text-sm font-semibold text-zinc-100">{suggestion.name}</h3>
@@ -82,7 +82,7 @@ export function CollabSuggester({ clubId }: CollabSuggesterProps) {
       ) : null}
 
       {suggestions && suggestions.length === 0 ? (
-        <div className="rounded-2xl border border-zinc-800 bg-[#111111] p-4 text-sm text-zinc-400">
+        <div className="rounded-2xl border border-zinc-800 bg-card/80 backdrop-blur-xl shadow-2xl p-4 text-sm text-zinc-400">
           No strong collaborator matches found yet.
         </div>
       ) : null}

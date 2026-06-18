@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { RsvpButton } from "@/components/dashboard/rsvp-button";
 import { getActiveRole, getCurrentUser, getCurrentClub } from "@/lib/auth";
+import { AwardAchievementButton } from "@/components/dashboard/award-achievement-button";
 
 export async function EventFeed() {
   const events = await prisma.event.findMany({
@@ -61,7 +62,7 @@ export async function EventFeed() {
                 {event.description}
               </p>
               
-              <div className="flex items-center text-xs text-zinc-500 bg-[#111111] inline-flex px-3 py-1.5 rounded-md border border-zinc-800/50">
+              <div className="flex items-center text-xs text-zinc-500 bg-card/80 backdrop-blur-xl shadow-2xl inline-flex px-3 py-1.5 rounded-md border border-zinc-800/50">
                 <span className="mr-2">📍</span>
                 {event.location}
               </div>
@@ -76,12 +77,19 @@ export async function EventFeed() {
                   </div>
                   
                   {activeClub && event.clubId === activeClub.id && (
-                    <div className="mt-1 bg-[#111111] p-3 rounded-lg border border-zinc-900 text-xs">
+                    <div className="mt-1 bg-card/80 backdrop-blur-xl shadow-2xl p-3 rounded-lg border border-zinc-900 text-xs">
                       <p className="text-zinc-500 font-semibold mb-1.5 uppercase tracking-wider text-[10px]">Attendee Roster</p>
                       {event.RSVP.length > 0 ? (
-                        <p className="text-zinc-300 font-medium">
-                          {event.RSVP.map(r => r.user.name).join(" • ")}
-                        </p>
+                        <>
+                          <p className="text-zinc-300 font-medium">
+                            {event.RSVP.map(r => r.user.name).join(" • ")}
+                          </p>
+                          <AwardAchievementButton 
+                            eventId={event.id}
+                            eventTitle={event.title}
+                            attendees={event.RSVP.map(r => r.user)}
+                          />
+                        </>
                       ) : (
                         <p className="text-zinc-600 italic">No students registered yet.</p>
                       )}

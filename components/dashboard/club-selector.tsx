@@ -48,7 +48,7 @@ export function ClubSelector() {
 
     if (response.ok) {
       setSelected(clubId);
-      await router.refresh();
+      window.location.reload();
     }
   }
 
@@ -60,7 +60,7 @@ export function ClubSelector() {
 
     if (response.ok) {
       setSelected("");
-      await router.refresh();
+      window.location.reload();
     }
   }
 
@@ -75,7 +75,7 @@ export function ClubSelector() {
         id="club-selector"
         value={selected}
         onChange={(event) => selectClub(event.target.value)}
-        className="rounded-lg border border-zinc-700 bg-[#111111] px-3 py-2 text-sm text-zinc-100 outline-none focus:ring-1 focus:ring-zinc-500"
+        className="rounded-lg border border-zinc-700 bg-card/80 backdrop-blur-xl shadow-2xl px-3 py-2 text-sm text-zinc-100 outline-none focus:ring-1 focus:ring-zinc-500"
       >
         <option value="" disabled={selected !== ""}>
           {selected ? "Switch club..." : "Select a club"}
@@ -89,7 +89,7 @@ export function ClubSelector() {
       {selected && (
         <button
           onClick={signOutClub}
-          className="rounded-lg border border-zinc-700 bg-[#111111] px-3 py-2 text-sm text-zinc-100 hover:bg-zinc-900"
+          className="rounded-lg border border-zinc-700 bg-card/80 backdrop-blur-xl shadow-2xl px-3 py-2 text-sm text-zinc-100 hover:bg-zinc-900"
         >
           Clear
         </button>

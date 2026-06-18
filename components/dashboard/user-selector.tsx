@@ -48,7 +48,7 @@ export function UserSelector() {
 
     if (response.ok) {
       setSelected(userId);
-      await router.refresh();
+      window.location.reload();
     }
   }
 
@@ -60,7 +60,7 @@ export function UserSelector() {
 
     if (response.ok) {
       setSelected("");
-      await router.refresh();
+      window.location.reload();
     }
   }
 
@@ -75,7 +75,7 @@ export function UserSelector() {
         id="user-selector"
         value={selected}
         onChange={(event) => signInUser(event.target.value)}
-        className="rounded-lg border border-zinc-700 bg-[#111111] px-3 py-2 text-sm text-zinc-100 outline-none focus:ring-1 focus:ring-zinc-500"
+        className="rounded-lg border border-zinc-700 bg-card/80 backdrop-blur-xl shadow-2xl px-3 py-2 text-sm text-zinc-100 outline-none focus:ring-1 focus:ring-zinc-500"
       >
         <option value="" disabled={selected !== ""}>
           {selected ? "Switch profile..." : "Signed out"}
@@ -89,7 +89,7 @@ export function UserSelector() {
       {selected && (
         <button
           onClick={signOutUser}
-          className="rounded-lg border border-zinc-700 bg-[#111111] px-3 py-2 text-sm text-zinc-100 hover:bg-zinc-900"
+          className="rounded-lg border border-zinc-700 bg-card/80 backdrop-blur-xl shadow-2xl px-3 py-2 text-sm text-zinc-100 hover:bg-zinc-900"
         >
           Sign out
         </button>

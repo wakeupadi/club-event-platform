@@ -15,9 +15,13 @@ datasource db {
 }
 
 model Club {
-  id     String  @id @default(cuid())
-  name   String
-  events Event[]
+  id         String  @id @default(cuid())
+  name       String
+  email      String?
+  provider   String?
+  providerId String?
+  verified   Boolean @default(false)
+  events     Event[]
 }
 
 model Event {
@@ -32,6 +36,7 @@ model Event {
   clubId String
   club   Club   @relation(fields: [clubId], references: [id])
   RSVP   RSVP[]
+  achievements Achievement[]
 }
 
 // NEW: The User profile to track Gamification points
@@ -40,6 +45,7 @@ model User {
   name   String
   points Int    @default(0) // Everyone starts at 0
   rsvps  RSVP[]
+  achievements Achievement[]
 }
 
 // NEW: The bridge table connecting Users and Events
@@ -50,6 +56,7 @@ model RSVP {
   user      User     @relation(fields: [userId], references: [id])
   event     Event    @relation(fields: [eventId], references: [id])
   createdAt DateTime @default(now())
+  attended  Boolean  @default(false)
 
   // This ensures a user can only RSVP to a specific event ONE time
   @@unique([userId, eventId])
@@ -63,3 +70,15 @@ model AcademicCalendar {
   endDate   DateTime
   type      String   // e.g., "EXAM", "HOLIDAY", "FEST"
 }
+
+// NEW: Track achievements and verified accolades for users
+model Achievement {
+  id          String   @id @default(cuid())
+  title       String   // e.g., "1st Place Winner", "Lead Organizer"
+  description String?  // Optional context
+  userId      String
+  eventId     String
+  user        User     @relation(fields: [userId], references: [id])
+  event       Event    @relation(fields: [eventId], references: [id])
+  verifiedAt  DateTime @default(now())
+}

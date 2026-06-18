@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { scrapeUGCalendar } from "./scrape-calendar";
 
 function getKolkataDateString(date: Date): string {
   const formatter = new Intl.DateTimeFormat("en-US", {
@@ -18,7 +19,7 @@ function getKolkataDateString(date: Date): string {
 
 export async function suggestBestDates() {
   try {
-    const blackoutDates = await prisma.academicCalendar.findMany();
+    const blackoutDates = await scrapeUGCalendar();
     const existingEvents = await prisma.event.findMany();
 
     const kolkataFormatter = new Intl.DateTimeFormat("en-US", {
@@ -46,7 +47,7 @@ export async function suggestBestDates() {
       let reasons: string[] = [];
       let isBlackout = false;
 
-      // RULE 1: The Blackout Check (Instant Disqualification)
+      // RULE 1: The Blackout Check and Exam Proximity Penalty
       for (const blackout of blackoutDates) {
         const startStr = getKolkataDateString(blackout.startDate);
         const endStr = getKolkataDateString(blackout.endDate);
@@ -54,6 +55,16 @@ export async function suggestBestDates() {
         if (dateStr >= startStr && dateStr <= endStr) {
           isBlackout = true;
           break;
+        }
+
+        if (blackout.type === "EXAM") {
+          const timeDiff = blackout.startDate.getTime() - testDate.getTime();
+          const daysBefore = Math.ceil(timeDiff / (1000 * 3600 * 24));
+          
+          if (daysBefore > 0 && daysBefore <= 7) {
+            score -= 40;
+            reasons.push("Approaching Exams");
+          }
         }
       }
       if (isBlackout) continue; // Instantly disqualified, do not score or suggest
@@ -72,9 +83,9 @@ export async function suggestBestDates() {
         reasons.push("Clear campus schedule");
       }
 
-      // RULE 3: The Prime-Time Bonus (Fridays and Saturdays)
+      // RULE 3: The Prime-Time Bonus (Fridays, Saturdays, and Sundays)
       const dayOfWeek = testDate.getUTCDay();
-      if (dayOfWeek === 5 || dayOfWeek === 6) { // 5 is Friday, 6 is Saturday
+      if (dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0) { // 5 is Friday, 6 is Saturday, 0 is Sunday
         score += 20;
         reasons.push("Prime weekend slot");
       }
@@ -99,6 +110,20 @@ export async function suggestBestDates() {
     
   } catch (error) {
     console.error("Algorithm failed:", error);
+    return [];
+  }
+}
+
+export async function getCalendarFlags() {
+  try {
+    const blackoutDates = await scrapeUGCalendar();
+    return blackoutDates.map(b => ({
+      ...b,
+      startDate: getKolkataDateString(b.startDate),
+      endDate: getKolkataDateString(b.endDate)
+    }));
+  } catch (error) {
+    console.error("Failed to fetch calendar flags:", error);
     return [];
   }
 }

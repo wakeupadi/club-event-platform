@@ -12,7 +12,7 @@ export async function DashboardHeader({ points = 0 }: DashboardHeaderProps) {
   const role = await getActiveRole();
 
   return (
-    <header className="flex h-16 shrink-0 items-center justify-between border-b border-zinc-800 bg-[#09090b]/80 px-6 backdrop-blur-sm">
+    <header className="print:hidden flex h-16 shrink-0 items-center justify-between border-b border-zinc-800 bg-[#09090b]/80 px-6 backdrop-blur-sm">
       <div>
         <h2 className="font-heading text-base font-semibold text-zinc-100">
           {role === "club" ? "Club Portal" : "Event Timeline"}

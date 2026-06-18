@@ -17,16 +17,18 @@ export function DashboardSidebar({ role = "student" }: DashboardSidebarProps) {
     ? [
         { label: "Timeline", href: "/", icon: LayoutDashboard },
         { label: "Create Event", href: "/create", icon: PlusCircle },
-        { label: "Campus Clubs", href: "/clubs", icon: Users },
+        { label: "Club Dashboard", href: "/club-dashboard", icon: Trophy },
+        { label: "Collaborations", href: "/clubs", icon: Users },
       ]
     : [
         { label: "Timeline", href: "/", icon: LayoutDashboard },
         { label: "My Schedule", href: "/my-events", icon: CalendarDays },
         { label: "Leaderboard", href: "/leaderboard", icon: Trophy },
+        { label: "My Portfolio", href: "/portfolio", icon: Trophy }, // Reusing trophy for now
       ];
 
   return (
-    <aside className="flex w-56 shrink-0 flex-col border-r border-sidebar-border bg-sidebar">
+    <aside className="print:hidden flex w-56 shrink-0 flex-col border-r border-sidebar-border bg-sidebar">
       <div className="border-b border-sidebar-border px-5 py-6">
         <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
           Campus Events

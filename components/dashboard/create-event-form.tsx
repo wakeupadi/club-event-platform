@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createEventAction } from "@/app/actions/event-actions";
 import { getClubs } from "@/app/actions/club-actions";
-import { suggestBestDates } from "@/app/actions/suggest-dates"; // NEW: Algorithm import
+import { suggestBestDates, getCalendarFlags } from "@/app/actions/suggest-dates"; // NEW: Algorithm import
+import { FlaggedCalendar } from "@/components/dashboard/flagged-calendar";
 
 export default function CreateEventForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -14,6 +15,7 @@ export default function CreateEventForm() {
   // NEW STATE FOR THE ALGORITHM
   const [isSuggesting, setIsSuggesting] = useState(false);
   const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [calendarFlags, setCalendarFlags] = useState<any[]>([]);
   
   const router = useRouter();
 
@@ -40,8 +42,12 @@ export default function CreateEventForm() {
   // Trigger the Conflict Resolution Engine
   async function handleGetSuggestions() {
     setIsSuggesting(true);
-    const optimalDates = await suggestBestDates();
+    const [optimalDates, flags] = await Promise.all([
+      suggestBestDates(),
+      getCalendarFlags()
+    ]);
     setSuggestions(optimalDates);
+    setCalendarFlags(flags);
     setIsSuggesting(false);
   }
 
@@ -87,7 +93,7 @@ export default function CreateEventForm() {
             required
             value={activeClubId}
             onChange={(e) => setActiveClubId(e.target.value)}
-            className="w-full bg-[#111111] border border-zinc-800 rounded-lg px-4 py-3 text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-500 transition-all appearance-none"
+            className="w-full bg-card/80 backdrop-blur-xl shadow-2xl border border-zinc-800 rounded-lg px-4 py-3 text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-500 transition-all appearance-none"
           >
             <option value="" disabled>Select a registered club...</option>
             {clubs.map((club) => (
@@ -106,7 +112,7 @@ export default function CreateEventForm() {
             id="title"
             name="title"
             required
-            className="w-full bg-[#111111] border border-zinc-800 rounded-lg px-4 py-3 text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-500 transition-all placeholder:text-zinc-600"
+            className="w-full bg-card/80 backdrop-blur-xl shadow-2xl border border-zinc-800 rounded-lg px-4 py-3 text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-500 transition-all placeholder:text-zinc-600"
             placeholder="e.g., Advanced Graph Theory Workshop"
           />
         </div>
@@ -133,29 +139,38 @@ export default function CreateEventForm() {
               id="date"
               name="date"
               required
-              className="w-full bg-[#111111] border border-zinc-800 rounded-lg px-4 py-3 text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-500 transition-all"
+              className="w-full bg-card/80 backdrop-blur-xl shadow-2xl border border-zinc-800 rounded-lg px-4 py-3 text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-500 transition-all"
               style={{ colorScheme: "dark" }} 
             />
 
             {/* The Suggestions Dropdown */}
             {suggestions.length > 0 && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-[#111111] border border-zinc-700 rounded-lg shadow-xl z-20 overflow-hidden">
-                <div className="px-4 py-2 bg-zinc-800/50 border-b border-zinc-800 text-xs font-semibold text-zinc-300 uppercase tracking-wider">
-                  Top Recommended Dates
+              <div className="mt-4">
+                <div className="mb-4 bg-card/80 backdrop-blur-xl shadow-2xl border border-zinc-800 rounded-lg shadow-xl overflow-hidden">
+                  <div className="px-4 py-2 bg-zinc-800/50 border-b border-zinc-800 text-xs font-semibold text-zinc-300 uppercase tracking-wider">
+                    Top Recommended Dates
+                  </div>
+                  <div className="divide-y divide-zinc-800">
+                    {suggestions.map((slot, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => applyDate(slot.date)}
+                        className="w-full text-left px-4 py-3 hover:bg-zinc-800/80 transition-colors flex flex-col gap-1"
+                      >
+                        <span className="font-medium text-emerald-400">{slot.displayDate}</span>
+                        <span className="text-xs text-zinc-400">{slot.reason}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <div className="divide-y divide-zinc-800">
-                  {suggestions.map((slot, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => applyDate(slot.date)}
-                      className="w-full text-left px-4 py-3 hover:bg-zinc-800/80 transition-colors flex flex-col gap-1"
-                    >
-                      <span className="font-medium text-zinc-100">{slot.displayDate}</span>
-                      <span className="text-xs text-zinc-400">{slot.reason}</span>
-                    </button>
-                  ))}
-                </div>
+                
+                {/* Visual Calendar */}
+                <FlaggedCalendar 
+                  suggestions={suggestions} 
+                  flags={calendarFlags} 
+                  onSelectDate={applyDate} 
+                />
               </div>
             )}
           </div>
@@ -168,7 +183,7 @@ export default function CreateEventForm() {
               id="time"
               name="time"
               required
-              className="w-full bg-[#111111] border border-zinc-800 rounded-lg px-4 py-3 text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-500 transition-all"
+              className="w-full bg-card/80 backdrop-blur-xl shadow-2xl border border-zinc-800 rounded-lg px-4 py-3 text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-500 transition-all"
               style={{ colorScheme: "dark" }}
             />
           </div>
@@ -182,7 +197,7 @@ export default function CreateEventForm() {
             id="location"
             name="location"
             required
-            className="w-full bg-[#111111] border border-zinc-800 rounded-lg px-4 py-3 text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-500 transition-all placeholder:text-zinc-600"
+            className="w-full bg-card/80 backdrop-blur-xl shadow-2xl border border-zinc-800 rounded-lg px-4 py-3 text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-500 transition-all placeholder:text-zinc-600"
             placeholder="e.g., CEP Building, Room 104"
           />
         </div>
@@ -195,7 +210,7 @@ export default function CreateEventForm() {
             name="description"
             rows={4}
             required
-            className="w-full bg-[#111111] border border-zinc-800 rounded-lg px-4 py-3 text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-500 transition-all resize-none placeholder:text-zinc-600"
+            className="w-full bg-card/80 backdrop-blur-xl shadow-2xl border border-zinc-800 rounded-lg px-4 py-3 text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-500 transition-all resize-none placeholder:text-zinc-600"
             placeholder="What should students expect at this event?"
           ></textarea>
         </div>

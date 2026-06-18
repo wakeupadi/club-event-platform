@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser, getActiveRole } from "@/lib/auth";
 import { CalendarDays } from "lucide-react";
+import { QrPassModal } from "@/components/dashboard/qr-pass-modal";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -66,6 +67,7 @@ export default async function MyEventsPage() {
                 <span className="mr-2">📍</span>
                 {event.location}
               </div>
+              <QrPassModal userId={userId} eventId={event.id} eventTitle={event.title} />
             </div>
           </div>
         ))}
