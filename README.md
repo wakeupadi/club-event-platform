@@ -1,6 +1,5 @@
 # EventHub: The Ultimate Campus Club Platform
 
-![EventHub](https://raw.githubusercontent.com/wakeupadi/club-event-platform/master/public/globe.svg)
 
 EventHub is a modern, high-performance web application built for university campuses. It seamlessly connects students with club events, automates attendance tracking using live QR code scanning, and uses the university's academic calendar to intelligently suggest optimal dates for new events.
 
