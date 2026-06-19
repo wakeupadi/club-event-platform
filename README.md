@@ -1,5 +1,8 @@
 # EventHub: The Ultimate Campus Club Platform
 
+🚀 **[Live Demo](https://club-event-platform-1kky.vercel.app/)** | 🌐 **[GitHub Repository](https://github.com/wakeupadi/club-event-platform)**
+
+!
 
 EventHub is a modern, high-performance web application built for university campuses. It seamlessly connects students with club events, automates attendance tracking using live QR code scanning, and uses the university's academic calendar to intelligently suggest optimal dates for new events.
 
@@ -57,4 +60,11 @@ This project is configured for 1-click deployment on Vercel.
 - Simply import the repository into Vercel, paste your `.env` variables, and deploy! No manual build steps required.
 
 ## 👥 Hackathon Notes
-For the purpose of the live demo, we implemented a seamless **"Role Switcher"**. This allows judges to instantly swap between the `Student` perspective and the `Club` perspective with zero friction, demonstrating the full lifecycle of an event without dealing with OAuth popups on stage!
+For the purpose of the live demo, we implemented a seamless **"Role Switcher"**. This allows judges to instantly swap between the `Student` perspective and the `Club` perspective with zero friction, demonstrating the full lifecycle of an event without dealing with OAuth popups on stage! 
+
+**Note on Users:** For demonstration purposes, the system is pre-populated with demo users and clubs to easily showcase the features without requiring sign-ups.
+
+## 🤖 AI Tools Disclosure
+In accordance with the Buildathon submission guidelines, we would like to disclose the use of the following AI tools during the development of EventHub:
+- **Cursor:** Used initially for setting up boilerplate code and exploring web scraping logic.
+- **Anti-Gravity (Agentic AI):** Used extensively after the mid-hackathon pivot to debug complex logic, refine the academic calendar scraping algorithm, and assist with UI enhancements.
