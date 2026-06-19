@@ -45,44 +45,30 @@ export async function scrapeUGCalendar() {
 }
 
 function getFallbackUGData() {
-  const today = new Date();
-  
-  // Mid-Semester Exams (UG specific) starting 10 days from today
-  const midSemStart = new Date(today);
-  midSemStart.setDate(today.getDate() + 10);
-  const midSemEnd = new Date(midSemStart);
-  midSemEnd.setDate(midSemStart.getDate() + 5);
-
-  // End-Semester Exams (UG specific) starting 40 days from today
-  const endSemStart = new Date(today);
-  endSemStart.setDate(today.getDate() + 40);
-  const endSemEnd = new Date(endSemStart);
-  endSemEnd.setDate(endSemStart.getDate() + 10);
-
-  // Diwali Break (HOLIDAY)
-  const diwaliStart = new Date(today);
-  diwaliStart.setDate(today.getDate() + 25);
-  const diwaliEnd = new Date(diwaliStart);
-  diwaliEnd.setDate(diwaliStart.getDate() + 5);
-
   return [
     {
-      title: "UG B.Tech Mid-Semester Exams",
-      startDate: midSemStart,
-      endDate: midSemEnd,
+      title: "UG First In-Semester Exams",
+      startDate: new Date("2026-08-31T00:00:00Z"),
+      endDate: new Date("2026-09-05T23:59:59Z"),
       type: "EXAM"
     },
     {
-      title: "UG B.Tech End-Semester Exams",
-      startDate: endSemStart,
-      endDate: endSemEnd,
+      title: "UG Mid-Semester / Second In-Semester Exams",
+      startDate: new Date("2026-10-06T00:00:00Z"),
+      endDate: new Date("2026-10-10T23:59:59Z"),
       type: "EXAM"
     },
     {
-      title: "University Diwali Break",
-      startDate: diwaliStart,
-      endDate: diwaliEnd,
+      title: "In-Semester (Diwali) Break",
+      startDate: new Date("2026-11-09T00:00:00Z"),
+      endDate: new Date("2026-11-13T23:59:59Z"),
       type: "HOLIDAY"
+    },
+    {
+      title: "UG End-Semester Exams",
+      startDate: new Date("2026-11-23T00:00:00Z"),
+      endDate: new Date("2026-12-05T23:59:59Z"),
+      type: "EXAM"
     }
   ];
 }

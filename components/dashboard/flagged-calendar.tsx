@@ -9,12 +9,12 @@ type FlaggedCalendarProps = {
 };
 
 export function FlaggedCalendar({ suggestions, flags, onSelectDate }: FlaggedCalendarProps) {
-  // Generate a 35-day grid starting from today
+  // Generate a 90-day grid starting from today
   const days = useMemo(() => {
     const list = [];
     const today = new Date();
     
-    for (let i = 0; i < 35; i++) {
+    for (let i = 0; i < 90; i++) {
       const d = new Date(today);
       d.setDate(today.getDate() + i);
       
